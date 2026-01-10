@@ -1,5 +1,6 @@
 declare const process: {
   env: Record<string, string | undefined>;
+  exit: (code?: number) => void;
 };
 
 declare namespace NodeJS {
@@ -24,6 +25,7 @@ declare const console: {
   log: (...args: unknown[]) => void;
   error: (...args: unknown[]) => void;
 };
+
 
 type FetchResponse = {
   ok: boolean;
