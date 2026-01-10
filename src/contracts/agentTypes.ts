@@ -39,6 +39,22 @@ export type StyleIntent = {
   emotions: string[];
 };
 
+export type ScheduleSummary = {
+  totalEvents: number;
+  dateCount: number;
+  locations: string[];
+  formalityCounts: Record<"casual" | "smart-casual" | "formal", number>;
+  notableEvents: string[];
+};
+
+export type LifestyleContext = {
+  schedule: ScheduleSummary;
+  moodSignals: string[];
+  keywords: string[];
+  effortLevel: StyleIntent["level"];
+  desiredVibes: StyleIntent["desiredVibes"];
+};
+
 export type ConversationTurn = {
   role: "user" | "assistant";
   content: string;

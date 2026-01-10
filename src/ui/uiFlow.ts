@@ -43,7 +43,7 @@ export const uiFlow: ScreenDefinition[] = [
     description: "미니미 캐릭터 + 오늘 추천 요약.",
     elements: [
       { type: "visual", description: "미니미 + 배경 테마" },
-      { type: "card", title: "오늘의 추천 룩", description: "날씨/일정/무드 반영" },
+      { type: "card", title: "오늘의 추천 룩", description: "일정/감정/대화 컨텍스트 반영" },
       { type: "cta", label: "피드백 남기기", action: "open-feedback" }
     ],
     next: ["daily-feedback", "weekly-recommendation"]

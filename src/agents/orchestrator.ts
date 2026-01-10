@@ -4,6 +4,7 @@ import { wardrobeAgent } from "./wardrobeAgent";
 import { historyAgent } from "./historyAgent";
 import { feedbackAgent } from "./feedbackAgent";
 import { conversationAgent } from "./conversationAgent";
+import { contextAgent } from "./contextAgent";
 import { recommendationAgent } from "./recommendationAgent";
 import { validationAgent } from "./validationAgent";
 
@@ -38,6 +39,12 @@ export const orchestrateWeeklyRecommendation = async (
     conversationAgent.run({ conversation: input.conversation })
   ]);
 
+  const lifestyleContext = await contextAgent.run({
+    schedule: input.schedule,
+    feedback: input.feedback,
+    styleIntent
+  });
+
   const recommendation = await recommendationAgent.run({
     context: input.context,
     weather,
@@ -45,7 +52,10 @@ export const orchestrateWeeklyRecommendation = async (
     history,
     feedback,
     schedule: input.schedule,
-    styleIntent
+    styleIntent,
+    lifestyleContext,
+    startDate: input.startDate,
+    endDate: input.endDate
   });
 
   const validationIssues = await validationAgent.run({ recommendation });

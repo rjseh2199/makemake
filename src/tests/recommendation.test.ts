@@ -81,15 +81,15 @@ const run = async () => {
   );
   assertCondition(
     result.recommendation.highlights.some((entry) =>
-      entry.includes("Schedule items: 1")
+      entry.includes("Schedule events: 1")
     ),
     "Highlights should include schedule count"
   );
   assertCondition(
     result.recommendation.highlights.some((entry) =>
-      entry.includes("Style intent: maximal")
+      entry.includes("Lifestyle effort: maximal")
     ),
-    "Highlights should include style intent"
+    "Highlights should include lifestyle effort"
   );
 };
 

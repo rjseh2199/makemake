@@ -19,10 +19,32 @@ export const conversationAgent: Agent<ConversationInput, StyleIntent> = {
       .map((turn) => turn.content)
       .join(" ");
 
+    const lowered = combined.toLowerCase();
+    const effortLevel = lowered.includes("꾸안꾸")
+      ? "balanced"
+      : lowered.includes("미니멀")
+      ? "minimal"
+      : lowered.includes("맥시멀")
+      ? "maximal"
+      : "maximal";
+    const vibes: StyleIntent["desiredVibes"] = [];
+    if (combined.includes("싸이월드")) {
+      vibes.push("cyworld");
+    }
+    if (combined.includes("90") || combined.includes("90년")) {
+      vibes.push("arcade-90s");
+    }
+    if (combined.includes("00") || combined.includes("00년")) {
+      vibes.push("arcade-00s");
+    }
+    if (vibes.length === 0) {
+      vibes.push("arcade-90s");
+    }
+
     const keywords = Array.from(new Set(extractKeywords(combined)));
     return {
-      level: "maximal",
-      desiredVibes: ["cyworld", "arcade-90s"],
+      level: effortLevel,
+      desiredVibes: vibes,
       keywords,
       emotions: ["excited"]
     };
