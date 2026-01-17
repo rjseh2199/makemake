@@ -39,6 +39,73 @@ export type StyleIntent = {
   emotions: string[];
 };
 
+export type GenderCategory = "male" | "female" | "non-binary";
+
+export type ClimateType = "cold" | "temperate" | "hot" | "humid" | "dry";
+
+export type Silhouette =
+  | "slim"
+  | "straight"
+  | "oversized"
+  | "mixed"
+  | "tailored"
+  | "structured"
+  | "classic_relaxed"
+  | "relaxed"
+  | "fluid"
+  | "workwear"
+  | "precise"
+  | "light_relaxed"
+  | "comfortable_clean"
+  | "classic";
+
+export type PersonaPalette = {
+  base: string[];
+  accent?: string[];
+};
+
+export type PersonaRaw = {
+  id: string;
+  name: string;
+  age: number;
+  gender_category: string;
+  occupation: string;
+  culture_label?: string;
+  city_culture?: string;
+  climate_type: string;
+  mobility_level: "low" | "medium" | "high";
+  dresscode_level: 0 | 1 | 2 | 3;
+  palette: PersonaPalette;
+  silhouette: string;
+  signature_items: string[];
+  avoid_rules: string[];
+  fabrics_bias?: string[];
+  footwear_bias?: string[];
+};
+
+export type Persona = {
+  id: string;
+  name: string;
+  age: number;
+  gender_category: GenderCategory;
+  occupation: string;
+  city_culture: string;
+  climate_type: ClimateType;
+  mobility_level: "low" | "medium" | "high";
+  dresscode_level: 0 | 1 | 2 | 3;
+  palette: PersonaPalette;
+  silhouette: Silhouette;
+  signature_items: string[];
+  avoid_rules: string[];
+  fabrics_bias?: string[];
+  footwear_bias?: string[];
+  normalized: {
+    silhouette: "slim" | "straight" | "oversized" | "mixed";
+    footwear_bias: Array<"loafers" | "derbies" | "sneakers" | "boots" | "heels" | "sandals">;
+    fabrics_bias: Array<"wool" | "linen" | "denim" | "tech" | "leather" | "cotton" | "silk">;
+  };
+};
+
 export type ScheduleSummary = {
   totalEvents: number;
   dateCount: number;
