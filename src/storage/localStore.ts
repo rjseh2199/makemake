@@ -7,7 +7,16 @@ const DEFAULT_SNAPSHOT: LocalDataSnapshot = {
   history: [],
   feedback: [],
   schedule: [],
-  conversation: []
+  conversation: [],
+  intent: "daily",
+  preferences: {
+    color_preference: "mixed",
+    fit_preference: "mixed",
+    discomfort_avoidance: [],
+    novelty_preference: "repeat_ok",
+    purchase_opt_in: false
+  },
+  bodyProfile: {}
 };
 
 const getStorePath = (storeDir: string) =>

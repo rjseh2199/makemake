@@ -1,10 +1,12 @@
 import { orchestrateWeeklyRecommendation } from "../agents/orchestrator";
 import type {
   AgentContext,
+  BodyProfile,
   ConversationTurn,
   FeedbackEntry,
   OutfitHistoryEntry,
   ScheduleEntry,
+  UserPreferences,
   WardrobeItem
 } from "../contracts/agentTypes";
 
@@ -57,6 +59,19 @@ const conversation: ConversationTurn[] = [
   }
 ];
 
+const preferences: UserPreferences = {
+  color_preference: "mixed",
+  fit_preference: "mixed",
+  discomfort_avoidance: [],
+  novelty_preference: "repeat_ok",
+  purchase_opt_in: false
+};
+
+const bodyProfile: BodyProfile = {
+  height_cm: 170,
+  weight_kg: 60
+};
+
 const assertCondition = (condition: boolean, message: string) => {
   if (!condition) {
     throw new Error(message);
@@ -72,24 +87,26 @@ const run = async () => {
     history,
     feedback,
     schedule,
-    conversation
+    conversation,
+    intent: "weekly",
+    preferences,
+    bodyProfile
   });
 
   assertCondition(
-    result.recommendation.outfits.length > 0,
-    "Should return outfits"
+    result.recommendation.cards.length === 2,
+    "Should return exactly two cards"
   );
   assertCondition(
-    result.recommendation.highlights.some((entry) =>
-      entry.includes("Schedule events: 1")
+    result.recommendation.cards.every((card) =>
+      card.render_spec.image_data_url.startsWith("data:image/svg+xml")
     ),
-    "Highlights should include schedule count"
+    "Cards should include rendered images"
   );
   assertCondition(
-    result.recommendation.highlights.some((entry) =>
-      entry.includes("Lifestyle effort: maximal")
-    ),
-    "Highlights should include lifestyle effort"
+    result.recommendation.cards[0].label === "Most Loved" &&
+      result.recommendation.cards[1].label === "Iconic",
+    "Cards should be labeled Most Loved and Iconic"
   );
 };
 

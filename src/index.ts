@@ -41,7 +41,16 @@ const run = async () => {
     history: snapshot.history,
     feedback: snapshot.feedback,
     schedule: snapshot.schedule,
-    conversation: snapshot.conversation
+    conversation: snapshot.conversation,
+    intent: snapshot.intent ?? "daily",
+    preferences: snapshot.preferences ?? {
+      color_preference: "mixed",
+      fit_preference: "mixed",
+      discomfort_avoidance: [],
+      novelty_preference: "repeat_ok",
+      purchase_opt_in: false
+    },
+    bodyProfile: snapshot.bodyProfile
   });
 
   if (settings.remoteSyncEnabled && settings.remoteBaseUrl && settings.remoteAuthToken) {

@@ -11,7 +11,15 @@ export type WeatherSummary = {
 export type WardrobeItem = {
   id: string;
   category: "top" | "bottom" | "outer" | "shoes" | "accessory";
+  subcategory?: string;
   color: string;
+  material?: string;
+  pattern?: string;
+  warmth_level?: number;
+  formality_level?: 0 | 1 | 2 | 3;
+  fit?: "relaxed" | "regular" | "slim" | "mixed";
+  seasonality?: "spring" | "summer" | "fall" | "winter" | "all";
+  image?: string;
   season: "spring" | "summer" | "fall" | "winter" | "all";
   lastWornDate?: string;
   condition: "new" | "good" | "worn" | "retire";
@@ -127,6 +135,23 @@ export type ConversationTurn = {
   content: string;
 };
 
+export type UserIntent = "daily" | "weekly" | "quiz";
+
+export type UserPreferences = {
+  color_preference: "neutral" | "muted" | "colorful" | "mixed";
+  fit_preference: "relaxed" | "regular" | "slim" | "mixed";
+  discomfort_avoidance: string[];
+  novelty_preference: "repeat_ok" | "avoid_repeats";
+  purchase_opt_in: boolean;
+};
+
+export type BodyProfile = {
+  height_cm?: number;
+  weight_kg?: number;
+  top_true_size?: string;
+  bottom_true_size?: string;
+};
+
 export type FeedbackEntry = {
   date: string;
   feedback: string;
@@ -134,23 +159,47 @@ export type FeedbackEntry = {
   tags?: string[];
 };
 
+export type PersonaMixEntry = {
+  persona_id: string;
+  weight: number;
+  reason: string;
+};
+
+export type RenderSpec = {
+  avatar_base_id: string;
+  avatar_gender: GenderCategory;
+  avatar_proportion_params: {
+    height_scale: number;
+    body_scale: number;
+  };
+  outfit_description: string;
+  color_palette: string[];
+  silhouette: Silhouette;
+  pose: "neutral_standing";
+  background: "plain";
+  image_data_url: string;
+};
+
+export type RecommendationCard = {
+  label: "Most Loved" | "Iconic";
+  outfit_items: {
+    top: WardrobeItem;
+    bottom: WardrobeItem;
+    shoes: WardrobeItem;
+    outerwear?: WardrobeItem;
+  };
+  render_spec: RenderSpec;
+  ui_tags: string[];
+  explanation?: string[];
+};
+
 export type Recommendation = {
-  weekOf: string;
-  outfits: Array<{
-    day: string;
-    items: WardrobeItem[];
-    mood: string;
-    vibe: "cyworld" | "arcade-90s" | "arcade-00s";
-    colorPalette: string[];
-    materials: string[];
-    accessories: string[];
-    notes: string;
+  persona_mix: PersonaMixEntry[];
+  cards: [RecommendationCard, RecommendationCard];
+  purchase_suggestions: Array<{
+    item_type: string;
+    constraints: string[];
   }>;
-  missingItems: Array<{
-    category: WardrobeItem["category"];
-    reason: string;
-  }>;
-  highlights: string[];
 };
 
 export type AgentContext = {
@@ -171,6 +220,9 @@ export type LocalDataSnapshot = {
   feedback: FeedbackEntry[];
   schedule: ScheduleEntry[];
   conversation: ConversationTurn[];
+  intent?: UserIntent;
+  preferences?: UserPreferences;
+  bodyProfile?: BodyProfile;
 };
 
 export type ValidationIssue = {

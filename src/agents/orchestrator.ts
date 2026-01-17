@@ -1,4 +1,16 @@
-import type { AgentContext, Recommendation, ValidationIssue, WardrobeItem, OutfitHistoryEntry, FeedbackEntry, ScheduleEntry, ConversationTurn } from "../contracts/agentTypes";
+import type {
+  AgentContext,
+  Recommendation,
+  ValidationIssue,
+  WardrobeItem,
+  OutfitHistoryEntry,
+  FeedbackEntry,
+  ScheduleEntry,
+  ConversationTurn,
+  UserIntent,
+  UserPreferences,
+  BodyProfile
+} from "../contracts/agentTypes";
 import { weatherAgent } from "./weatherAgent";
 import { wardrobeAgent } from "./wardrobeAgent";
 import { historyAgent } from "./historyAgent";
@@ -17,6 +29,9 @@ export type OrchestratorInput = {
   feedback: FeedbackEntry[];
   schedule: ScheduleEntry[];
   conversation: ConversationTurn[];
+  intent: UserIntent;
+  preferences: UserPreferences;
+  bodyProfile?: BodyProfile;
 };
 
 export type OrchestratorResult = {
@@ -55,7 +70,10 @@ export const orchestrateWeeklyRecommendation = async (
     styleIntent,
     lifestyleContext,
     startDate: input.startDate,
-    endDate: input.endDate
+    endDate: input.endDate,
+    intent: input.intent,
+    preferences: input.preferences,
+    bodyProfile: input.bodyProfile
   });
 
   const validationIssues = await validationAgent.run({ recommendation });

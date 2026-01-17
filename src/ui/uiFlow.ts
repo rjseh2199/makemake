@@ -1,5 +1,8 @@
 export type ScreenId =
-  | "onboarding"
+  | "start"
+  | "daily-intent"
+  | "weekly-intent"
+  | "style-quiz"
   | "home"
   | "weekly-recommendation"
   | "daily-feedback"
@@ -24,16 +27,46 @@ export type ScreenDefinition = {
 
 export const uiFlow: ScreenDefinition[] = [
   {
-    id: "onboarding",
-    title: "온보딩",
-    description: "설정/취향/보유 옷/알림을 수집하는 초기 흐름.",
+    id: "start",
+    title: "시작",
+    description: "첫 실행 시 의도 선택 화면.",
     elements: [
-      { type: "hero", title: "패션 집사 시작하기", subtitle: "미니미와 함께" },
-      { type: "card", title: "API 키/모델 설정", description: "초기 설정 후 수정 가능" },
-      { type: "card", title: "위치 동의", description: "동네예보 기반 추천" },
-      { type: "card", title: "보유 옷 등록", description: "카테고리/색/소재" },
-      { type: "card", title: "취향/무드 선택", description: "싸이월드/90s/00s" },
-      { type: "card", title: "알림 설정", description: "프로모션/추천 알림" }
+      { type: "hero", title: "오늘 뭐 입지?", subtitle: "가장 빠른 시작" },
+      { type: "cta", label: "오늘/내일 추천", action: "open-daily-intent" },
+      { type: "cta", label: "주간 추천 만들기", action: "open-weekly-intent" },
+      { type: "cta", label: "스타일 발견(2분)", action: "open-style-quiz" }
+    ],
+    next: ["daily-intent", "weekly-intent", "style-quiz"]
+  },
+  {
+    id: "daily-intent",
+    title: "오늘/내일 추천",
+    description: "최소 질문으로 바로 추천.",
+    elements: [
+      { type: "card", title: "기분/상황", description: "오늘의 무드" },
+      { type: "card", title: "불편한 요소", description: "피하고 싶은 것" },
+      { type: "cta", label: "추천 보기", action: "show-daily-result" }
+    ],
+    next: ["home"]
+  },
+  {
+    id: "weekly-intent",
+    title: "주간 추천",
+    description: "이번 주 상황에 맞춘 추천.",
+    elements: [
+      { type: "card", title: "주간 무드", description: "전체 분위기" },
+      { type: "card", title: "주요 상황", description: "일/데이트/행사" },
+      { type: "cta", label: "주간 추천 보기", action: "show-weekly-result" }
+    ],
+    next: ["weekly-recommendation"]
+  },
+  {
+    id: "style-quiz",
+    title: "스타일 발견",
+    description: "6문항 이내로 선호도를 파악.",
+    elements: [
+      { type: "list", title: "질문", items: ["무드", "싫은 요소", "상황", "컬러", "핏"] },
+      { type: "cta", label: "퀴즈 완료", action: "finish-quiz" }
     ],
     next: ["home"]
   },

@@ -10,20 +10,29 @@ export const validationAgent: Agent<ValidationInput, ValidationIssue[]> = {
   async run(input) {
     const issues: ValidationIssue[] = [];
 
-    if (input.recommendation.outfits.length === 0) {
+    if (input.recommendation.cards.length !== 2) {
       issues.push({
         severity: "warning",
-        message: "No outfits were generated for the week."
+        message: "Expected exactly two outfit cards (Most Loved, Iconic)."
       });
     }
 
-    const hasMissingItems = input.recommendation.missingItems.length > 0;
-    if (hasMissingItems) {
+    const labels = input.recommendation.cards.map((card) => card.label);
+    if (!labels.includes("Most Loved") || !labels.includes("Iconic")) {
       issues.push({
-        severity: "info",
-        message: "Missing item recommendations are available."
+        severity: "warning",
+        message: "Cards must include both Most Loved and Iconic labels."
       });
     }
+
+    input.recommendation.cards.forEach((card) => {
+      if (!card.render_spec.image_data_url) {
+        issues.push({
+          severity: "warning",
+          message: `${card.label} card is missing a rendered image.`
+        });
+      }
+    });
 
     return issues;
   }
