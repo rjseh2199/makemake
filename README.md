@@ -38,6 +38,11 @@ npm run build
 npm start
 ```
 
+### 개발 서버
+```bash
+npm run dev:server
+```
+
 ## 부족한 것 체크리스트
 - [x] `.env.example` 제공
 - [x] lockfile(`package-lock.json`) 커밋

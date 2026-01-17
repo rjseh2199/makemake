@@ -3,6 +3,7 @@ import type { LocalDataSnapshot } from "../contracts/agentTypes";
 export type RemoteStoreConfig = {
   baseUrl: string;
   authToken: string;
+  userId?: string;
 };
 
 export const uploadSnapshot = async (
@@ -15,7 +16,7 @@ export const uploadSnapshot = async (
       "Content-Type": "application/json",
       Authorization: `Bearer ${config.authToken}`
     },
-    body: JSON.stringify(snapshot)
+    body: JSON.stringify({ userId: config.userId, snapshot })
   });
 
   if (!response.ok) {
@@ -28,7 +29,8 @@ export const uploadSnapshot = async (
 export const downloadSnapshot = async (
   config: RemoteStoreConfig
 ): Promise<LocalDataSnapshot> => {
-  const response = await fetch(`${config.baseUrl}/snapshot`, {
+  const query = config.userId ? `?userId=${encodeURIComponent(config.userId)}` : "";
+  const response = await fetch(`${config.baseUrl}/snapshot${query}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${config.authToken}`
